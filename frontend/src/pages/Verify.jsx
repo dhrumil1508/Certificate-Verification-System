@@ -86,25 +86,25 @@ export default function Verify() {
   }, [isVerified, resultId]);
 
   return (
-    <section className="rounded-[32px] bg-white p-8 shadow-hero">
+    <section className="rounded-[24px] bg-white p-5 shadow-hero sm:rounded-[32px] sm:p-8">
       <div>
-        <h1 className="font-display text-3xl">
+        <h1 className="font-display text-[2rem] leading-tight sm:text-3xl">
           Student Certificate Verification
         </h1>
-        <p className="mt-2 text-ink-soft">
+        <p className="mt-2 text-sm leading-6 text-ink-soft sm:text-base">
           Enter your Certificate ID to view and download the certificate
           instantly.
         </p>
       </div>
-      <div className="mt-6 grid gap-6 md:grid-cols-2">
+      <div className="mt-6 grid gap-4 md:grid-cols-2 md:gap-6">
         <form
-          className="flex flex-col gap-3 rounded-2xl border border-[#f0d7c1] bg-[#f9f4ec] p-6"
+          className="flex flex-col gap-3 rounded-2xl border border-[#f0d7c1] bg-[#f9f4ec] p-4 sm:p-6"
           onSubmit={handleSubmit}
         >
           <label className="font-semibold" htmlFor="certificate-id">
             Certificate ID
           </label>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <input
               id="certificate-id"
               name="certificate-id"
@@ -114,24 +114,24 @@ export default function Verify() {
               value={certificateId}
               onChange={(event) => setCertificateId(event.target.value)}
               required
-              className="min-w-[180px] flex-1 rounded-xl border border-[#e8d4c2] bg-white px-4 py-3"
+              className="w-full min-w-0 flex-1 rounded-xl border border-[#e8d4c2] bg-white px-4 py-3"
             />
             <button
               type="submit"
               disabled={loading}
-              className="rounded-full bg-accent px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(255,106,61,0.3)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-full bg-accent px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(255,106,61,0.3)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
             >
               {loading ? "Searching..." : "Search"}
             </button>
           </div>
-          <div className="text-xs text-ink-soft">
+          <div className="text-xs leading-5 text-ink-soft">
             Tip: Your certificate ID is in the internship confirmation mail.
           </div>
         </form>
-        <div className="flex flex-col gap-4 rounded-2xl bg-ink p-6 text-white">
-          <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-4 rounded-2xl bg-ink p-4 text-white sm:p-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div className="font-semibold">Certificate Snapshot</div>
-            <div className="rounded-full bg-[#1f2f47] px-3 py-1 text-xs text-[#c7d4ef]">
+            <div className="w-fit rounded-full bg-[#1f2f47] px-3 py-1 text-xs text-[#c7d4ef]">
               {loading ? "Searching" : status}
             </div>
           </div>
@@ -147,18 +147,22 @@ export default function Verify() {
             ].map(([label, value]) => (
               <div
                 key={label}
-                className="flex items-center justify-between border-b border-white/10 pb-2 last:border-none"
+                className="flex flex-col gap-1 border-b border-white/10 pb-2 last:border-none sm:flex-row sm:items-center sm:justify-between"
               >
-                <span>{label}</span>
-                <strong className={label === "Certificate ID" ? "font-mono" : ""}>
+                <span className="text-sm text-[#c7d4ef]">{label}</span>
+                <strong
+                  className={`text-sm sm:text-base ${
+                    label === "Certificate ID" ? "font-mono" : ""
+                  }`}
+                >
                   {value}
                 </strong>
               </div>
             ))}
           </div>
-          <div className="flex flex-wrap gap-3 pt-2">
+          <div className="flex flex-col gap-3 pt-2 sm:flex-row">
             <button
-              className="rounded-full border border-[#f0d7c1] bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-full border border-[#f0d7c1] bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
               type="button"
               disabled={!isVerified}
               onClick={() => navigate(`/certificate/${resultId}`)}
@@ -166,7 +170,7 @@ export default function Verify() {
               View Certificate
             </button>
             <button
-              className="rounded-full bg-accent px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(255,106,61,0.3)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-full bg-accent px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(255,106,61,0.3)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
               type="button"
               disabled={!isVerified}
               onClick={() => navigate(`/certificate/${resultId}`)}
@@ -179,21 +183,21 @@ export default function Verify() {
               <div className="text-xs uppercase tracking-[0.2em] text-[#c7d4ef]">
                 Scan to verify
               </div>
-              <div className="mt-3 flex items-center gap-4">
+              <div className="mt-3 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 {qrCodeDataUrl ? (
                   <img
                     src={qrCodeDataUrl}
                     alt={`QR code for certificate ${resultId}`}
-                    className="h-24 w-24 rounded-2xl bg-white p-2"
+                    className="h-28 w-28 rounded-2xl bg-white p-2 sm:h-24 sm:w-24"
                   />
                 ) : (
-                  <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-white/10 text-xs text-[#c7d4ef]">
+                  <div className="flex h-28 w-28 items-center justify-center rounded-2xl bg-white/10 text-xs text-[#c7d4ef] sm:h-24 sm:w-24">
                     Generating...
                   </div>
                 )}
-                <div className="text-sm text-[#e8eefb]">
+                <div className="min-w-0 text-sm text-[#e8eefb]">
                   <div className="font-semibold">Open the verification page</div>
-                  <div className="mt-1 break-all text-xs text-[#c7d4ef]">
+                  <div className="mt-1 break-all text-xs leading-5 text-[#c7d4ef]">
                     {`${import.meta.env.VITE_APP_URL || window.location.origin}/certificate/${resultId}`}
                   </div>
                 </div>
