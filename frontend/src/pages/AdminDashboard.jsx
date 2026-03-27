@@ -32,7 +32,7 @@ const formatPreviewDate = (value) => {
     return formatParts(
       excelEpoch.getUTCDate(),
       excelEpoch.getUTCMonth() + 1,
-      excelEpoch.getUTCFullYear()
+      excelEpoch.getUTCFullYear(),
     );
   }
 
@@ -41,7 +41,7 @@ const formatPreviewDate = (value) => {
     return formatParts(
       parsedDate.getDate(),
       parsedDate.getMonth() + 1,
-      parsedDate.getFullYear()
+      parsedDate.getFullYear(),
     );
   }
 
@@ -141,11 +141,16 @@ export default function AdminDashboard() {
 
       const normalizedPreview = rows.map((row, index) => ({
         id: index + 1,
-        name: readPreviewValue(row, ["Name", "Student Name", "name", "studentName"]),
+        name: readPreviewValue(row, [
+          "Name",
+          "Student Name",
+          "name",
+          "studentName",
+        ]),
         course: readPreviewValue(row, ["Course", "Course Name", "course"]),
         email: readPreviewValue(row, ["Email", "Email Address", "email"]),
         startDate: formatPreviewDate(
-          readPreviewValue(row, ["Start Date", "startDate", "StartDate"])
+          readPreviewValue(row, ["Start Date", "startDate", "StartDate"]),
         ),
         endDate: formatPreviewDate(
           readPreviewValue(row, [
@@ -155,7 +160,7 @@ export default function AdminDashboard() {
             "End Date",
             "endDate",
             "EndDate",
-          ])
+          ]),
         ),
       }));
 
@@ -223,8 +228,8 @@ export default function AdminDashboard() {
                 certificateId: data.certificate.certificateId,
                 certificateUrl: data.certificate.certificateUrl,
               }
-            : student
-        )
+            : student,
+        ),
       );
       await refreshDashboard();
       setStatus({ type: "success", message: data.message });
@@ -247,7 +252,7 @@ export default function AdminDashboard() {
 
     try {
       const certificate = await apiRequest(
-        `/api/certificates/${student.certificateId}`
+        `/api/certificates/${student.certificateId}`,
       );
       setPreviewCertificate(certificate);
       setPreviewStudentName(student.name);
@@ -274,7 +279,7 @@ export default function AdminDashboard() {
         `/api/certificates/${previewCertificate.certificateId}/downloaded`,
         {
           method: "POST",
-        }
+        },
       );
       await refreshDashboard();
       setStatus({
@@ -320,15 +325,18 @@ export default function AdminDashboard() {
     setStatus({ type: "idle", message: "" });
 
     try {
-      const data = await apiRequest(`/api/admin/students/${editingStudent._id}`, {
-        method: "PUT",
-        body: JSON.stringify(editForm),
-      });
+      const data = await apiRequest(
+        `/api/admin/students/${editingStudent._id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(editForm),
+        },
+      );
 
       setStudents((current) =>
         current.map((student) =>
-          student._id === editingStudent._id ? data.student : student
-        )
+          student._id === editingStudent._id ? data.student : student,
+        ),
       );
       await refreshDashboard();
       closeEditModal();
@@ -350,7 +358,7 @@ export default function AdminDashboard() {
       });
 
       setStudents((current) =>
-        current.filter((item) => item._id !== student._id)
+        current.filter((item) => item._id !== student._id),
       );
       await refreshDashboard();
       setStatus({ type: "success", message: data.message });
@@ -430,12 +438,9 @@ export default function AdminDashboard() {
               </div>
               <div
                 className={`h-3 w-3 rounded-full shadow-[0_0_0_6px_rgba(255,255,255,0.85)] ${
-                  [
-                    "bg-accent",
-                    "bg-[#4a7bff]",
-                    "bg-mint",
-                    "bg-[#f7b267]",
-                  ][index]
+                  ["bg-accent", "bg-[#4a7bff]", "bg-mint", "bg-[#f7b267]"][
+                    index
+                  ]
                 }`}
               />
             </div>
@@ -491,16 +496,16 @@ export default function AdminDashboard() {
       <section className="grid gap-5 xl:grid-cols-[1.1fr,0.9fr]">
         <div className="rounded-[24px] border border-dashed border-[#f0cdb0] bg-gradient-to-br from-white via-[#fff7ef] to-[#ffe9d6] px-5 py-5 sm:px-6 sm:py-6">
           <div className="max-w-xl">
-              <div className="text-[13px] uppercase tracking-[0.2em] text-ink-soft">
-                Bulk Upload
-              </div>
-              <h2 className="mt-2 font-display text-[1.35rem] leading-tight">
-                Upload student records and manage imports instantly
-              </h2>
-              <p className="mt-2 text-[15px] leading-6 text-ink-soft">
-                Upload your Excel sheet to preview student records before
-                importing them into the dashboard.
-              </p>
+            <div className="text-[13px] uppercase tracking-[0.2em] text-ink-soft">
+              Bulk Upload
+            </div>
+            <h2 className="mt-2 font-display text-[1.35rem] leading-tight">
+              Upload student records and manage imports instantly
+            </h2>
+            <p className="mt-2 text-[15px] leading-6 text-ink-soft">
+              Upload your Excel sheet to preview student records before
+              importing them into the dashboard.
+            </p>
           </div>
 
           <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -544,9 +549,15 @@ export default function AdminDashboard() {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2.5 text-[13px] text-ink-soft">
-            <span className="rounded-full bg-white px-3 py-1.5">Student data</span>
-            <span className="rounded-full bg-white px-3 py-1.5">Quick file preview</span>
-            <span className="rounded-full bg-white px-3 py-1.5">Ready for certificate generation</span>
+            <span className="rounded-full bg-white px-3 py-1.5">
+              Student data
+            </span>
+            <span className="rounded-full bg-white px-3 py-1.5">
+              Quick file preview
+            </span>
+            <span className="rounded-full bg-white px-3 py-1.5">
+              Ready for certificate generation
+            </span>
           </div>
         </div>
 
@@ -650,8 +661,12 @@ export default function AdminDashboard() {
                     <th className="px-4 py-3 font-semibold">Student Name</th>
                     <th className="px-4 py-3 font-semibold">Course</th>
                     <th className="px-4 py-3 font-semibold">Date</th>
-                    <th className="px-4 py-3 font-semibold">Generate Certificate</th>
-                    <th className="px-4 py-3 font-semibold">Preview Certificate</th>
+                    <th className="px-4 py-3 font-semibold">
+                      Generate Certificate
+                    </th>
+                    <th className="px-4 py-3 font-semibold">
+                      Preview Certificate
+                    </th>
                     <th className="px-4 py-3 font-semibold">Actions</th>
                   </tr>
                 </thead>
@@ -664,27 +679,33 @@ export default function AdminDashboard() {
                             `STD-${String(index + 1).padStart(3, "0")}`}
                         </td>
                         <td className="px-4 py-4">
-                          <div className="font-semibold text-ink">{student.name}</div>
+                          <div className="font-semibold text-ink">
+                            {student.name}
+                          </div>
                           <div className="mt-1 text-xs text-ink-soft">
                             {student.email}
                           </div>
                         </td>
-                        <td className="px-4 py-4 text-ink-soft">{student.course}</td>
+                        <td className="px-4 py-4 text-ink-soft">
+                          {student.course}
+                        </td>
                         <td className="px-4 py-4 text-ink-soft">
                           {formatTableDate(student.createdAt)}
                         </td>
                         <td className="px-4 py-4">
                           <button
                             type="button"
-                            onClick={() => handleGenerateCertificate(student._id)}
+                            onClick={() =>
+                              handleGenerateCertificate(student._id)
+                            }
                             disabled={activeStudentId === student._id}
                             className="rounded-full bg-ink px-4 py-2 text-xs font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
                           >
                             {activeStudentId === student._id
                               ? "Generating..."
                               : student.certificateId
-                              ? "Regenerate"
-                              : "Generate"}
+                                ? "Regenerate"
+                                : "Generate"}
                           </button>
                         </td>
                         <td className="px-4 py-4">
@@ -729,11 +750,11 @@ export default function AdminDashboard() {
                               ×
                             </button>
                             {deleteConfirmStudentId === student._id ? (
-                              <div className="absolute right-0 top-full z-20 mt-2 w-[240px] rounded-2xl border border-[#f1d7c7] bg-[#fff6f0] p-3 text-xs text-[#c2552e] shadow-[0_10px_24px_rgba(15,27,45,0.12)]">
+                              <div className="absolute right-0 top-full z-20 mt-2 min-w-[270px] max-w-xs rounded-2xl border border-[#f1d7c7] bg-[#fff6f0] p-3 text-xs text-[#c2552e] shadow-[0_10px_24px_rgba(15,27,45,0.12)]">
                                 <div className="font-semibold text-[#b64923]">
                                   Delete this student?
                                 </div>
-                                <div className="mt-1 leading-5">
+                                <div className="mt-1 leading-5 break-words">
                                   This will also remove the linked certificate
                                   record.
                                 </div>
@@ -764,7 +785,10 @@ export default function AdminDashboard() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="6" className="px-4 py-8 text-center text-ink-soft">
+                      <td
+                        colSpan="6"
+                        className="px-4 py-8 text-center text-ink-soft"
+                      >
                         No students imported yet. Upload an Excel sheet to
                         populate the table.
                       </td>
@@ -785,7 +809,9 @@ export default function AdminDashboard() {
                 <div className="text-xs uppercase tracking-[0.2em] text-ink-soft">
                   Edit Student
                 </div>
-                <h3 className="mt-2 font-display text-2xl">Update student details</h3>
+                <h3 className="mt-2 font-display text-2xl">
+                  Update student details
+                </h3>
               </div>
               <button
                 type="button"
@@ -798,7 +824,9 @@ export default function AdminDashboard() {
 
             <form className="mt-6 space-y-4" onSubmit={handleUpdateStudent}>
               <div>
-                <label className="text-sm font-semibold text-ink">Student Name</label>
+                <label className="text-sm font-semibold text-ink">
+                  Student Name
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -834,7 +862,9 @@ export default function AdminDashboard() {
                   disabled={activeStudentId === editingStudent._id}
                   className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {activeStudentId === editingStudent._id ? "Saving..." : "Save Changes"}
+                  {activeStudentId === editingStudent._id
+                    ? "Saving..."
+                    : "Save Changes"}
                 </button>
                 <button
                   type="button"
@@ -893,12 +923,17 @@ export default function AdminDashboard() {
               <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {[
                   ["Certificate ID", previewCertificate.certificateId],
-                  ["Start Date", previewCertificate.startDate || "Not provided"],
+                  [
+                    "Start Date",
+                    previewCertificate.startDate || "Not provided",
+                  ],
                   ["End Date", previewCertificate.endDate || "Not provided"],
                   ["Duration", previewCertificate.duration || "Not available"],
                   [
                     "Issue Date",
-                    new Date(previewCertificate.issuedAt).toLocaleDateString("en-IN"),
+                    new Date(previewCertificate.issuedAt).toLocaleDateString(
+                      "en-IN",
+                    ),
                   ],
                   ["Email", previewCertificate.email],
                 ].map(([label, value]) => (
@@ -933,7 +968,6 @@ export default function AdminDashboard() {
           </div>
         </div>
       ) : null}
-
     </section>
   );
 }
